@@ -53,31 +53,8 @@ void GetMonitorEdid(HDEVINFO hDevInfo, SP_DEVINFO_DATA& devInfoData)
     }
 }
 
-void EnumerateDisplays() {
-    DISPLAY_DEVICE displayDevice;
-    displayDevice.cb = sizeof(DISPLAY_DEVICE);
-    DWORD deviceIndex = 0;
-
-    while (EnumDisplayDevices(NULL, deviceIndex, &displayDevice, 0)) {
-        std::wcout << L"Device Name: " << displayDevice.DeviceName << std::endl;
-        std::wcout << L"Device String: " << displayDevice.DeviceString << std::endl;
-        std::wcout << L"State Flags: " << displayDevice.StateFlags << std::endl;
-		std::wcout << L"Device ID: " << displayDevice.DeviceID << std::endl;
-		std::wcout << L"Device Key: " << displayDevice.DeviceKey << std::endl;
-
-        if (displayDevice.StateFlags & DISPLAY_DEVICE_ACTIVE) {
-            DISPLAY_DEVICE monitor;
-            monitor.cb = sizeof(DISPLAY_DEVICE);
-            EnumDisplayDevices(displayDevice.DeviceName, 0, &monitor, 0);
-            std::wcout << L"Monitor Name: " << monitor.DeviceString << std::endl;
-        }
-        deviceIndex++;
-    }
-}
-
 void main()
 {
-    EnumerateDisplays();
     HDEVINFO hDevInfo = SetupDiGetClassDevs(&GUID_DEVCLASS_MONITOR, NULL, NULL, DIGCF_PRESENT);
     if (hDevInfo == INVALID_HANDLE_VALUE)
     {
